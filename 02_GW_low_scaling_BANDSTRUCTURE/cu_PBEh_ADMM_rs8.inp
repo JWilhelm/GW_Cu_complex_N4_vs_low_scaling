@@ -1,0 +1,171 @@
+&GLOBAL
+
+  PROJECT qm_region_side_chains_linRTBSE
+  PRINT_LEVEL MEDIUM
+  RUN_TYPE ENERGY
+  
+  &TIMINGS
+    TIMINGS_LEVEL 1
+    THRESHOLD 2.00000000E-006
+  &END TIMINGS
+
+&END GLOBAL
+
+
+
+&FORCE_EVAL
+  
+  
+  METHOD QS
+  
+  
+  &DFT
+    BASIS_SET_FILE_NAME BASIS_GTH_MOLOPT_AUG
+    BASIS_SET_FILE_NAME BASIS_GTH_MOLOPT_AUG_RI
+    BASIS_SET_FILE_NAME BASIS_ADMM_UZH
+    POTENTIAL_FILE_NAME GTH_POTENTIALS
+
+    &AUXILIARY_DENSITY_MATRIX_METHOD
+      ADMM_TYPE ADMM2
+      EXCH_CORRECTION_FUNC PBEX
+    &END AUXILIARY_DENSITY_MATRIX_METHOD
+
+    CHARGE        1 
+    MULTIPLICITY  2
+    LSD .TRUE.
+    
+    &MGRID
+      CUTOFF      600
+      REL_CUTOFF  60
+    &END MGRID
+    
+    &QS
+      METHOD GPW
+    &END QS
+    
+    &POISSON
+      PERIODIC NONE
+      PSOLVER MULTIPOLE
+    &END
+    
+    &SCF
+       SCF_GUESS ATOMIC
+       EPS_SCF 1e-7
+       MAX_SCF 10
+       &OT
+          MINIMIZER CG
+          PRECONDITIONER FULL_SINGLE_INVERSE
+       &END OT
+       &OUTER_SCF
+          EPS_SCF 1e-7
+          MAX_SCF 50
+       &END OUTER_SCF
+      &PRINT
+        &RESTART ON
+        &END
+      &END
+      &MIXING
+          METHOD BROYDEN_MIXING
+          ALPHA 0.1
+          BETA 1.5
+          NBROYDEN 8
+      &END
+    &END SCF
+  	
+    &XC
+	    &XC_FUNCTIONAL
+        &PBE
+          SCALE_X 0.65
+          SCALE_C 1.0
+        &END PBE
+	    &END XC_FUNCTIONAL
+      &HF
+        FRACTION 0.35
+      &END HF
+    &END XC
+  
+  &END DFT
+  
+  
+  &PROPERTIES
+    &BANDSTRUCTURE
+      &GW
+
+        NUM_TIME_FREQ_POINTS 30      # Number of discrete points for the imaginary-time grid and the imaginary-frequency grid. 30 points is for 0.01 eV accuracy.
+        EPS_FILTER 1.0E-10
+        REGULARIZATION_RI 1.0E-5
+        
+        &PRINT
+          &RESTART ON
+          &END RESTART
+        &END PRINT
+        
+        &RI_RS T
+          TIKHONOV 1.0E-5          
+          &GRID_OPTIMIZATION
+            CUTOFF_ATOMIC_CLUSTER 3    # Radius of the atom-centred cluster used to optimize the grid points. All atoms within this distance of the centre atom are included.
+            RS_AO_RATIO 8
+          &END GRID_OPTIMIZATION
+        &END RI_RS 
+      
+      &END GW
+    &END BANDSTRUCTURE
+  &END PROPERTIES
+  
+  
+  &SUBSYS
+
+    &CELL
+      ABC 30 30 30 
+      PERIODIC NONE
+    &END CELL
+    
+    &TOPOLOGY
+      &CENTER_COORDINATES
+        CENTER_POINT  15.21 41.2047855 11.622
+      &END
+      COORD_FILE_NAME qm_region_side_chains_N1.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+    
+    &KIND H
+      BASIS_SET ORB     aug-DZVP-MOLOPT-GTH-tier-2
+      BASIS_SET RI_AUX  RI_aug-DZVP-MOLOPT-GTH-tier-2_N_RI_019_5_3_1_0_0_0_0_error_4.6e-07
+      BASIS_SET AUX_FIT admm-dzp-q1
+      POTENTIAL GTH-PBE-q1
+    &END KIND
+    &KIND C
+      BASIS_SET ORB     aug-DZVP-MOLOPT-GTH-tier-2
+      BASIS_SET RI_AUX  RI_aug-DZVP-MOLOPT-GTH-tier-2_N_RI_088_7_6_3_3_3_0_0_error_3.6e-06
+      BASIS_SET AUX_FIT admm-dzp-q4
+      POTENTIAL GTH-PBE-q4
+    &END KIND
+    &KIND N
+      BASIS_SET ORB     aug-DZVP-MOLOPT-GTH-tier-2
+      BASIS_SET RI_AUX  RI_aug-DZVP-MOLOPT-GTH-tier-2_N_RI_076_7_5_3_3_2_0_0_error_2.9e-06
+      BASIS_SET AUX_FIT admm-dzp-q5
+      POTENTIAL GTH-PBE-q5
+    &END KIND
+    &KIND N1
+      BASIS_SET ORB     aug-TZVP-MOLOPT-GTH-tier-2
+      BASIS_SET RI_AUX  RI_aug-TZVP-MOLOPT-GTH-tier-2_N_RI_111_7_6_4_4_3_1_0_error_1.3e-05
+      BASIS_SET AUX_FIT admm-tzp-q5
+      POTENTIAL GTH-PBE-q5
+    &END KIND
+    &KIND S
+      BASIS_SET ORB     aug-TZVP-MOLOPT-GTH-tier-2
+      BASIS_SET RI_AUX  RI_aug-TZVP-MOLOPT-GTH-tier-2_N_RI_109_7_6_5_3_3_1_0_error_4.1e-06
+      BASIS_SET AUX_FIT admm-tzp-q6
+      POTENTIAL GTH-PBE-q6
+    &END KIND
+    &KIND Cu
+      BASIS_SET ORB     aug-TZVP-MOLOPT-GTH-tier-2
+      BASIS_SET RI_AUX  RI_aug-TZVP-MOLOPT-GTH-tier-2_N_RI_116_6_5_5_4_2_1_1_error_6.8e-04
+      BASIS_SET AUX_FIT admm-tzp-q11
+      POTENTIAL GTH-PBE-q11
+    &END KIND
+  
+  &END SUBSYS
+
+
+&END FORCE_EVAL
