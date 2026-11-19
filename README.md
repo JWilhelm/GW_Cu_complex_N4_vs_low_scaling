@@ -21,7 +21,7 @@ G0W0@PBEh (35 % exact exchange) + ADMM2, energies in eV.
 | β LUMO | −2.910 | −2.919 | −9 |
 | **β gap** | **7.706** | **7.700** | −6 |
 
-The ten highest occupied and ten lowest unoccupied levels of each spin agree within 14 meV.
+The ten highest occupied and ten lowest unoccupied levels of each spin agree within 16 meV.
 
 Where to find the numbers:
 
